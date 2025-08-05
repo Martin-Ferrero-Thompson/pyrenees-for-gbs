@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pyrenees for Guillain-Barré Syndrome</title>
+  <!-- Set dark mode class before Tailwind loads -->
+  <script>
+    (function() {
+      try {
+        var theme = localStorage.getItem('gbs-theme') || 'system';
+        if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch(e) {}
+    })();
+    // Configure Tailwind to use class-based dark mode
+    window.tailwind = window.tailwind || {};
+    window.tailwind.config = { darkMode: 'class' };
+  </script>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <meta name="description" content="A charity ride across the Pyrenees to raise awareness and support for Guillain-Barré Syndrome.">
@@ -607,6 +623,7 @@
       applyTheme(theme);
     }
     function applyTheme(theme) {
+      // Always toggle only on <html>
       if (theme === 'light') {
         document.documentElement.classList.remove('dark');
       } else if (theme === 'dark') {
@@ -619,8 +636,17 @@
           document.documentElement.classList.remove('dark');
         }
       }
+      // Force reflow to ensure Tailwind applies dark mode
+      void document.documentElement.offsetHeight;
       updateThemeIcon(theme);
     }
+
+    // Listen for system theme changes and update if in system mode
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (getTheme() === 'system') {
+        applyTheme('system');
+      }
+    });
     function updateThemeIcon(theme) {
       const icon = document.getElementById('theme-icon');
       if (theme === 'light') {
@@ -693,10 +719,6 @@
       }
       // Theme
       applyTheme(getTheme());
-      // System theme change
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        if (getTheme() === 'system') applyTheme('system');
-      });
     })();
   </script>
 </body>
