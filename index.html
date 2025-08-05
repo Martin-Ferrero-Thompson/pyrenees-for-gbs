@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyrenees for Guillain-Barré Syndrome - Charity Cycle Ride</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Style for navbar on scroll */
+        .scrolled {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .dark .scrolled {
+            background-color: rgba(17, 24, 39, 0.9); /* dark:bg-gray-900 */
+        }
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Active flag style */
+        .flag-active {
+            box-shadow: 0 0 0 3px #3b82f6; /* blue-500 */
+        }
+        
+        /* NEW Accordion styles */
+        .accordion-item {
+            background-color: transparent;
+            border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+            transition: background-color 0.3s ease-in-out;
+        }
+        .dark .accordion-item {
+            border-bottom-color: #374151; /* dark:border-gray-700 */
+        }
+        .accordion-item.open {
+            background-color: #f9fafb; /* bg-gray-50 */
+        }
+        .dark .accordion-item.open {
+            background-color: #1f2937; /* dark:bg-gray-800 */
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+        }
+        .accordion-toggle svg {
+            transition: transform 0.3s ease-in-out;
+        }
+        .accordion-item.open .icon-plus {
+            transform: rotate(45deg);
+        }
+
+        /* Fade-in/out transitions */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+            pointer-events: none;
+        }
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s ease-in;
+            pointer-events: auto;
+        }
+        .hidden-initial {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-500">
+
+    <!-- Language/Region Selection Portal -->
+    <div id="portal" class="fixed inset-0 z-50 flex items-center justify-center bg-cover bg-center transition-opacity duration-500" style="background-image: url('https://images.unsplash.com/photo-1569428034239-f95653423729?q=80&w=2070&auto=format&fit=crop');">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="relative text-center text-white p-8 bg-black/30 backdrop-blur-sm rounded-lg shadow-2xl max-w-3xl mx-4">
+            <h1 class="text-4xl md:text-5xl font-black uppercase tracking-wider">Pyrenees for Guillain-Barré Syndrome</h1>
+            <p class="mt-2 text-lg md:text-xl font-light">A charity ride to raise awareness and support.</p>
+            <hr class="my-6 border-white/30">
+            <p class="text-lg md:text-xl font-light mb-2">Welcome / Bienvenido / Bienvenue</p>
+            <p class="text-lg md:text-xl font-light mb-8">Please select your region:</p>
+            <div id="portal-lang-selector" class="flex justify-center items-center gap-x-10">
+                <div class="text-center w-32 transition-transform duration-200 hover:scale-105">
+                    <img src="https://placehold.co/80x80/FFFFFF/000000?text=🇬🇧" alt="English" data-lang="en" class="w-20 h-20 mx-auto rounded-full cursor-pointer shadow-md">
+                    <span class="mt-2 block font-semibold">United Kingdom</span>
+                </div>
+                <div class="text-center w-32 transform scale-110 transition-transform duration-200 hover:scale-115">
+                    <img src="https://placehold.co/80x80/FFFFFF/000000?text=🇪🇸" alt="Español" data-lang="es" class="w-20 h-20 mx-auto rounded-full cursor-pointer shadow-lg">
+                    <span class="mt-2 block font-semibold">España</span>
+                </div>
+                <div class="text-center w-32 transition-transform duration-200 hover:scale-105">
+                    <img src="https://placehold.co/80x80/FFFFFF/000000?text=🇫🇷" alt="Français" data-lang="fr" class="w-20 h-20 mx-auto rounded-full cursor-pointer shadow-md">
+                    <span class="mt-2 block font-semibold">France</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Website Content -->
+    <div id="main-content" class="hidden-initial">
+        <!-- Floating Social Panel -->
+        <aside class="fixed top-1/2 -translate-y-1/2 left-0 z-40 ml-2 md:ml-4">
+            <div class="flex flex-col space-y-4 bg-white/50 dark:bg-gray-800/50 p-2 rounded-full backdrop-blur-sm">
+                <a href="#" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-transform duration-200 hover:scale-110"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c-4.05.05-5.454.213-6.41.583A4.708 4.708 0 002.583 5.905c-.37.956-.533 2.36-.583 6.41s.213 5.454.583 6.41a4.708 4.708 0 003.322 3.322c.956.37 2.36.533 6.41.583s5.454-.213 6.41-.583a4.708 4.708 0 003.322-3.322c.37-.956.533-2.36.583-6.41s-.213-5.454-.583-6.41A4.708 4.708 0 0018.725 2.583C17.769 2.213 16.365 2.05 12.315 2zM12 7.182a4.818 4.818 0 100 9.636 4.818 4.818 0 000-9.636zm0 7.909a3.091 3.091 0 110-6.182 3.091 3.091 0 010 6.182zm6.272-8.182a1.182 1.182 0 100-2.364 1.182 1.182 0 000 2.364z" clip-rule="evenodd"/></svg></a>
+                <a href="#" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-transform duration-200 hover:scale-110"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h3.44L11.779 0 6.625 10.172h3.443"/></svg></a>
+                <a href="#" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-transform duration-200 hover:scale-110"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"/></svg></a>
+            </div>
+        </aside>
+
+        <!-- Header & Navbar -->
+        <header id="navbar" class="fixed top-0 left-0 right-0 z-30 transition-all duration-300">
+            <nav class="container mx-auto px-6 py-3">
+                <div class="flex justify-between items-center">
+                    <a href="#" id="logo-link" class="text-2xl font-bold text-gray-800 dark:text-white cursor-pointer">GBS</a>
+                    <div class="hidden md:flex items-center space-x-4 lg:space-x-6">
+                        <a href="#story" class="text-sm lg:text-base text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition">
+                            <span class="lang-content" data-lang="en">The Story</span>
+                            <span class="lang-content hidden" data-lang="es">La Historia</span>
+                            <span class="lang-content hidden" data-lang="fr">L'Histoire</span>
+                        </a>
+                        <a href="#ride" class="text-sm lg:text-base text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition">
+                            <span class="lang-content" data-lang="en">The Ride</span>
+                            <span class="lang-content hidden" data-lang="es">La Ruta</span>
+                            <span class="lang-content hidden" data-lang="fr">Le Parcours</span>
+                        </a>
+                        <a href="#gbs" class="text-sm lg:text-base text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition">
+                            <span class="lang-content" data-lang="en">About GBS</span>
+                            <span class="lang-content hidden" data-lang="es">Sobre el SGB</span>
+                            <span class="lang-content hidden" data-lang="fr">À propos du SGB</span>
+                        </a>
+                        <a href="#charity" class="text-sm lg:text-base text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition">
+                            <span class="lang-content" data-lang="en">The Charity</span>
+                            <span class="lang-content hidden" data-lang="es">La Fundación</span>
+                            <span class="lang-content hidden" data-lang="fr">La Fondation</span>
+                        </a>
+                        <a href="#sponsors" class="text-sm lg:text-base text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition">
+                            <span class="lang-content" data-lang="en">Sponsors</span>
+                            <span class="lang-content hidden" data-lang="es">Patrocinadores</span>
+                            <span class="lang-content hidden" data-lang="fr">Sponsors</span>
+                        </a>
+                        <a href="#updates" class="text-sm lg:text-base text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition">
+                            <span class="lang-content" data-lang="en">Updates</span>
+                            <span class="lang-content hidden" data-lang="es">Noticias</span>
+                            <span class="lang-content hidden" data-lang="fr">Actualités</span>
+                        </a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button id="theme-toggle" class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                            <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                            <svg id="theme-icon-system" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section id="hero" class="h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1569428034239-f95653423729?q=80&w=2070&auto=format&fit=crop');">
+                <div class="absolute inset-0 bg-black/50"></div>
+                <div class="relative text-center text-white p-4">
+                    <h1 class="text-5xl md:text-7xl font-black uppercase tracking-wider">
+                        <span class="lang-content" data-lang="en">Cycling the Pyrenees, Defeating GBS.</span>
+                        <span class="lang-content hidden" data-lang="es">Cruzando los Pirineos, Venciendo el SGB.</span>
+                        <span class="lang-content hidden" data-lang="fr">Traverser les Pyrénées, Vaincre le SGB.</span>
+                    </h1>
+                    <p class="mt-4 text-lg md:text-2xl font-light">
+                        <span class="lang-content" data-lang="en">One rider's journey from paralysis to the peaks to support the GBS community.</span>
+                        <span class="lang-content hidden" data-lang="es">El viaje de un ciclista de la parálisis a las cimas para apoyar a la comunidad SGB.</span>
+                        <span class="lang-content hidden" data-lang="fr">Le parcours d'un cycliste de la paralysie aux sommets pour soutenir la communauté SGB.</span>
+                    </p>
+                    <a href="#charity" class="mt-8 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full text-lg uppercase transition-transform duration-200 hover:scale-105">
+                        <span class="lang-content" data-lang="en">Support The Ride</span>
+                        <span class="lang-content hidden" data-lang="es">Apoya la Ruta</span>
+                        <span class="lang-content hidden" data-lang="fr">Soutenir le Projet</span>
+                    </a>
+                </div>
+            </section>
+
+            <section id="story" class="py-20 bg-gray-50 dark:bg-gray-800">
+                <div class="container mx-auto px-6">
+                    <div class="md:grid md:grid-cols-2 md:gap-12 items-center">
+                        <div class="mb-8 md:mb-0">
+                            <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=2070&auto=format&fit=crop" alt="Rider with bike" class="rounded-lg shadow-2xl w-full">
+                        </div>
+                        <div>
+                            <h2 class="text-4xl font-bold mb-4 text-blue-600 dark:text-blue-400">
+                                <span class="lang-content" data-lang="en">My Journey</span>
+                                <span class="lang-content hidden" data-lang="es">Mi Viaje</span>
+                                <span class="lang-content hidden" data-lang="fr">Mon Parcours</span>
+                            </h2>
+                            <div class="space-y-4 text-lg text-gray-600 dark:text-gray-300">
+                                <p class="lang-content" data-lang="en">In 2022, my world turned upside down. Guillain-Barré Syndrome took away my ability to walk, to move, to be independent. It was a terrifying journey through paralysis and uncertainty. But with incredible medical support and the strength from my family, I began the slow, arduous process of recovery. This ride is more than just a physical challenge; it's a celebration of every step I've retaken and a mission to ensure no one faces GBS alone.</p>
+                                <p class="lang-content hidden" data-lang="es">En 2022, mi mundo se puso patas arriba. El síndrome de Guillain-Barré me quitó la capacidad de caminar, de moverme, de ser independiente. Fue un viaje aterrador a través de la parálisis y la incertidumbre. Pero con un increíble apoyo médico y la fuerza de mi familia, comencé el lento y arduo proceso de recuperación. Esta ruta es más que un desafío físico; es una celebración de cada paso que he vuelto a dar y una misión para asegurar que nadie se enfrente al SGB solo.</p>
+                                <p class="lang-content hidden" data-lang="fr">En 2022, mon monde a basculé. Le syndrome de Guillain-Barré m'a enlevé ma capacité à marcher, à bouger, à être indépendant. Ce fut un voyage terrifiant à través la paralysie et l'incertitude. Mais avec un soutien médical incroyable et la force de ma famille, j'ai entamé le lent et ardu processus de récupération. Ce parcours est más que un défi physique ; c'est une célébration de chaque pas que j'ai refait et une mission pour que personne n'affronte le SGB seul.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="gbs" class="py-20">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-4xl font-bold mb-2">
+                        <span class="lang-content" data-lang="en">What is Guillain-Barré Syndrome?</span>
+                        <span class="lang-content hidden" data-lang="es">¿Qué es el Síndrome de Guillain-Barré?</span>
+                        <span class="lang-content hidden" data-lang="fr">Qu'est-ce que le syndrome de Guillain-Barré ?</span>
+                    </h2>
+                    <p class="text-lg text-gray-500 dark:text-gray-400 mb-12 max-w-3xl mx-auto">
+                        <span class="lang-content" data-lang="en">A rare neurological disorder where the body's immune system mistakenly attacks its own nerves.</span>
+                        <span class="lang-content hidden" data-lang="es">Un trastorno neurológico raro en el que el sistema inmunitario del cuerpo ataca por error sus propios nervios.</span>
+                        <span class="lang-content hidden" data-lang="fr">Un trouble neurologique rare où le système immunitaire du corps attaque par erreur ses propres nerfs.</span>
+                    </p>
+                    <div class="max-w-3xl mx-auto text-left space-y-2" id="accordion-container">
+                        <!-- Accordion Item 1 -->
+                        <div class="accordion-item rounded-lg">
+                            <button class="accordion-toggle w-full flex justify-between items-center p-4 text-xl font-semibold text-left">
+                                <span>
+                                    <span class="lang-content" data-lang="en">A Sudden Attack</span>
+                                    <span class="lang-content hidden" data-lang="es">Un Ataque Repentino</span>
+                                    <span class="lang-content hidden" data-lang="fr">Une Attaque Soudaine</span>
+                                </span>
+                                <svg class="w-6 h-6 icon-plus" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            </button>
+                            <div class="accordion-content px-6">
+                                <p class="pb-4 text-gray-600 dark:text-gray-300">
+                                    <span class="lang-content" data-lang="en">GBS can affect anybody. It can strike at any age and nobody is immune. The cause is unknown. It often follows a minor infection, but the body's immune system goes into overdrive and attacks the peripheral nervous system, leading to weakness and paralysis that can develop over hours or days.</span>
+                                    <span class="lang-content hidden" data-lang="es">El SGB puede afectar a cualquiera. Puede aparecer a cualquier edad y nadie es inmune. La causa es desconocida. A menudo sigue a una infección menor, pero el sistema inmunitario del cuerpo se sobreactiva y ataca el sistema nervioso periférico, lo que lleva a una debilidad y parálisis que pueden desarrollarse en horas o días.</span>
+                                    <span class="lang-content hidden" data-lang="fr">Le SGB peut toucher n'importe qui. Il peut survenir à tout âge et personne n'est immunisé. La cause est inconnue. Il suit souvent une infection mineure, mais le système immunitaire du corps s'emballe et attaque le système nerveux périphérique, entraînant une faiblesse et une paralysie qui peuvent se développer en quelques heures ou jours.</span>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Accordion Item 2 -->
+                        <div class="accordion-item rounded-lg">
+                            <button class="accordion-toggle w-full flex justify-between items-center p-4 text-xl font-semibold text-left">
+                                <span>
+                                    <span class="lang-content" data-lang="en">The Path to Recovery</span>
+                                    <span class="lang-content hidden" data-lang="es">El Camino a la Recuperación</span>
+                                    <span class="lang-content hidden" data-lang="fr">Le Chemin de la Guérison</span>
+                                </span>
+                                <svg class="w-6 h-6 icon-plus" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            </button>
+                            <div class="accordion-content px-6">
+                                <p class="pb-4 text-gray-600 dark:text-gray-300">
+                                    <span class="lang-content" data-lang="en">Recovery can be long and challenging, often requiring months or even years of physical therapy. While many people recover fully, some are left with long-term weakness or other neurological symptoms. The journey is unique to each individual.</span>
+                                    <span class="lang-content hidden" data-lang="es">La recuperación puede ser larga y desafiante, a menudo requiriendo meses o incluso años de fisioterapia. Aunque muchas personas se recuperan por completo, algunas quedan con debilidad a largo plazo u otros síntomas neurológicos. El viaje es único para cada individuo.</span>
+                                    <span class="lang-content hidden" data-lang="fr">La guérison peut être longue et difficile, nécessitant souvent des mois, voire des années, de physiothérapie. Bien que de nombreuses personnes se rétablissent complètement, certaines conservent une faiblesse à long terme ou d'autres symptômes neurologiques. Le parcours est unique à chaque individu.</span>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Accordion Item 3 -->
+                        <div class="accordion-item rounded-lg">
+                            <button class="accordion-toggle w-full flex justify-between items-center p-4 text-xl font-semibold text-left">
+                               <span>
+                                   <span class="lang-content" data-lang="en">How Support Helps</span>
+                                   <span class="lang-content hidden" data-lang="es">Cómo Ayuda el Apoyo</span>
+                                   <span class="lang-content hidden" data-lang="fr">Comment le Soutien Aide</span>
+                               </span>
+                                <svg class="w-6 h-6 icon-plus" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            </button>
+                            <div class="accordion-content px-6">
+                                <p class="pb-4 text-gray-600 dark:text-gray-300">
+                                    <span class="lang-content" data-lang="en">Charities and support agencies are vital. They fund crucial research into the causes and treatments of GBS, provide essential information to patients and families, and build a community so that no one has to go through this experience feeling isolated.</span>
+                                    <span class="lang-content hidden" data-lang="es">Las organizaciones benéficas y de apoyo son vitales. Financian investigaciones cruciales sobre las causas y tratamientos del SGB, proporcionan información esencial a los pacientes y sus familias, y construyen una comunidad para que nadie tenga que pasar por esta experiencia sintiéndose aislado.</span>
+                                    <span class="lang-content hidden" data-lang="fr">Les associations caritatives et de soutien sont vitales. Elles financent la recherche cruciale sur les causes et les traitements du SGB, fournissent des informations essentielles aux patients et à leurs familles, et créent une communauté pour que personne n'ait à vivre cette expérience en se sentant isolé.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ride" class="py-20 bg-gray-50 dark:bg-gray-800">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-4xl font-bold text-center mb-12">
+                        <span class="lang-content" data-lang="en">The Challenge: Across the Pyrenees</span>
+                        <span class="lang-content hidden" data-lang="es">El Reto: A Través de los Pirineos</span>
+                        <span class="lang-content hidden" data-lang="fr">Le Défi : À Travers les Pyrénées</span>
+                    </h2>
+                    <div class="md:grid md:grid-cols-2 md:gap-12 items-center">
+                        <div class="mb-8 md:mb-0">
+                            <img src="https://placehold.co/800x600/334155/E2E8F0?text=Route+Map" alt="Map of the Pyrenees ride" class="rounded-lg shadow-lg w-full">
+                        </div>
+                        <div class="text-center md:text-left">
+                            <div class="grid grid-cols-3 gap-8 mb-8">
+                                <div class="text-center"><div class="text-5xl font-black text-blue-600 dark:text-blue-400">~800</div><div class="text-lg text-gray-600 dark:text-gray-300">km</div></div>
+                                <div class="text-center"><div class="text-5xl font-black text-blue-600 dark:text-blue-400">~18k</div><div class="text-lg text-gray-600 dark:text-gray-300">m</div></div>
+                                <div class="text-center"><div class="text-5xl font-black text-blue-600 dark:text-blue-400">~7</div><div class="text-lg text-gray-600 dark:text-gray-300">
+                                    <span class="lang-content" data-lang="en">Days</span>
+                                    <span class="lang-content hidden" data-lang="es">Días</span>
+                                    <span class="lang-content hidden" data-lang="fr">Jours</span>
+                                </div></div>
+                            </div>
+                            <p class="text-lg text-gray-600 dark:text-gray-300">
+                                <span class="lang-content" data-lang="en">The legendary coast-to-coast route tackles some of cycling's most iconic climbs, including the Col du Tourmalet and Col d'Aubisque. It's a true test of endurance, a fitting metaphor for the recovery journey from GBS.</span>
+                                <span class="lang-content hidden" data-lang="es">La legendaria ruta de costa a costa aborda algunas de las subidas más icónicas del ciclismo, incluyendo el Col du Tourmalet y el Col d'Aubisque. Es una verdadera prueba de resistencia, una metáfora adecuada para el viaje de recuperación del SGB.</span>
+                                <span class="lang-content hidden" data-lang="fr">La légendaire route de côte à côte s'attaque à certaines des ascensions les plus emblématiques du cyclisme, dont le Col du Tourmalet et le Col d'Aubisque. C'est un véritable test d'endurance, une métaphore appropriée pour le chemin de la guérison du SGB.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- The Charity Section -->
+            <section id="charity" class="py-20">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-4xl font-bold mb-2">
+                        <span class="lang-content" data-lang="en">Support Our UK Partner</span>
+                        <span class="lang-content hidden" data-lang="es">Apoya a Nuestro Socio Español</span>
+                        <span class="lang-content hidden" data-lang="fr">Soutenez Notre Partenaire Français</span>
+                    </h2>
+                    <p class="text-lg text-gray-500 dark:text-gray-400 mb-12 max-w-3xl mx-auto">
+                        <span class="lang-content" data-lang="en">All donations go directly to GAIN to support their work in the UK & Republic of Ireland.</span>
+                        <span class="lang-content hidden" data-lang="es">Todas las donaciones van directamente a la Asociación Española de GBS para apoyar su trabajo en España.</span>
+                        <span class="lang-content hidden" data-lang="fr">Tous les dons vont directement à l'Association Française du SGB pour soutenir leur travail en France.</span>
+                    </p>
+                    <!-- Charity cards will be shown/hidden by JS -->
+                    <div class="max-w-md mx-auto">
+                        <div class="lang-content bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 transform hover:-translate-y-2 transition-transform duration-300" data-lang="en">
+                            <img src="https://placehold.co/150x80/FFFFFF/000000?text=UK+Charity+Logo" alt="UK Charity Logo" class="h-16 mx-auto mb-4">
+                            <h3 class="text-2xl font-bold mb-2">GAIN (UK)</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-6">Guillain-Barré & Associated Inflammatory Neuropathies charity in the UK & Republic of Ireland.</p>
+                            <a href="#" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition">Donate to GAIN</a>
+                        </div>
+                        <div class="lang-content hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 transform hover:-translate-y-2 transition-transform duration-300" data-lang="es">
+                            <img src="https://placehold.co/150x80/FFFFFF/000000?text=ES+Charity+Logo" alt="Spanish Charity Logo" class="h-16 mx-auto mb-4">
+                            <h3 class="text-2xl font-bold mb-2">Asociación Española GBS</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-6">The Spanish Association for GBS, PFS, and MFS, providing support and resources to patients and families across Spain.</p>
+                            <a href="#" class="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full transition">Donar a la Asociación</a>
+                        </div>
+                        <div class="lang-content hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 transform hover:-translate-y-2 transition-transform duration-300" data-lang="fr">
+                            <img src="https://placehold.co/150x80/FFFFFF/000000?text=FR+Charity+Logo" alt="French Charity Logo" class="h-16 mx-auto mb-4">
+                            <h3 class="text-2xl font-bold mb-2">Association Française GBS</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-6">The French Association for GBS, providing a network of support for those affected throughout France.</p>
+                            <a href="#" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition">Faire un don à l'Association</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sponsors" class="py-20 bg-gray-50 dark:bg-gray-800">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-4xl font-bold mb-4">
+                        <span class="lang-content" data-lang="en">Our Valued Sponsors</span>
+                        <span class="lang-content hidden" data-lang="es">Nuestros Valiosos Patrocinadores</span>
+                        <span class="lang-content hidden" data-lang="fr">Nos Précieux Sponsors</span>
+                    </h2>
+                    <p class="text-lg text-gray-500 dark:text-gray-400 mb-12">
+                        <span class="lang-content" data-lang="en">This journey is made possible by the generous support of our sponsors.</span>
+                        <span class="lang-content hidden" data-lang="es">Este viaje es posible gracias al generoso apoyo de nuestros patrocinadores.</span>
+                        <span class="lang-content hidden" data-lang="fr">Ce voyage est rendu possible grâce au soutien généreux de nos sponsors.</span>
+                    </p>
+                    <div class="flex justify-center items-center flex-wrap gap-8 md:gap-12 mb-16">
+                        <img src="https://placehold.co/150x60/FFFFFF/000000?text=Sponsor+1" alt="Sponsor 1 Logo" class="h-12 md:h-16 opacity-70 hover:opacity-100 transition">
+                        <img src="https://placehold.co/150x60/FFFFFF/000000?text=Sponsor+2" alt="Sponsor 2 Logo" class="h-12 md:h-16 opacity-70 hover:opacity-100 transition">
+                        <img src="https://placehold.co/150x60/FFFFFF/000000?text=Sponsor+3" alt="Sponsor 3 Logo" class="h-12 md:h-16 opacity-70 hover:opacity-100 transition">
+                        <img src="https://placehold.co/150x60/FFFFFF/000000?text=Sponsor+4" alt="Sponsor 4 Logo" class="h-12 md:h-16 opacity-70 hover:opacity-100 transition">
+                    </div>
+                    <div class="bg-white dark:bg-gray-700 rounded-lg p-8 max-w-3xl mx-auto shadow-lg">
+                        <h3 class="text-2xl font-bold mb-2">
+                            <span class="lang-content" data-lang="en">Become a Partner</span>
+                            <span class="lang-content hidden" data-lang="es">Conviértete en Socio</span>
+                            <span class="lang-content hidden" data-lang="fr">Devenez Partenaire</span>
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">
+                            <span class="lang-content" data-lang="en">Align your brand with a powerful story of resilience and hope. Contact us to learn about sponsorship opportunities.</span>
+                            <span class="lang-content hidden" data-lang="es">Alinea tu marca con una poderosa historia de resiliencia y esperanza. Contáctanos para conocer las oportunidades de patrocinio.</span>
+                            <span class="lang-content hidden" data-lang="fr">Associez votre marque à une histoire puissante de résilience et d'espoir. Contactez-nous pour connaître les opportunités de parrainage.</span>
+                        </p>
+                        <a href="mailto:sponsorship@example.com?subject=Sponsorship Inquiry: Pyrenees for GBS Ride" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full transition">
+                            <span class="lang-content" data-lang="en">Sponsorship Inquiries</span>
+                            <span class="lang-content hidden" data-lang="es">Consultas de Patrocinio</span>
+                            <span class="lang-content hidden" data-lang="fr">Demandes de Parrainage</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="updates" class="py-20">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-4xl font-bold text-center mb-12">
+                        <span class="lang-content" data-lang="en">Latest Updates</span>
+                        <span class="lang-content hidden" data-lang="es">Últimas Noticias</span>
+                        <span class="lang-content hidden" data-lang="fr">Dernières Mises à Jour</span>
+                    </h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Update Card 1 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?q=80&w=2070&auto=format&fit=crop" class="w-full h-48 object-cover" alt="Training in the hills">
+                            <div class="p-6">
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">August 1, 2025</p>
+                                <h3 class="text-xl font-bold mb-2">
+                                    <span class="lang-content" data-lang="en">Training Begins!</span>
+                                    <span class="lang-content hidden" data-lang="es">¡Comienza el Entrenamiento!</span>
+                                    <span class="lang-content hidden" data-lang="fr">L'entraînement Commence !</span>
+                                </h3>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    <span class="lang-content" data-lang="en">The first official training ride is in the books. The legs are feeling good and the motivation is high!</span>
+                                    <span class="lang-content hidden" data-lang="es">El primer entrenamiento oficial ya está hecho. ¡Las piernas se sienten bien y la motivación está alta!</span>
+                                    <span class="lang-content hidden" data-lang="fr">La première sortie d'entraînement officielle est terminée. Les jambes sont bonnes et la motivation est au top !</span>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Update Card 2 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1621253523833-f3922651109b?q=80&w=1974&auto=format&fit=crop" class="w-full h-48 object-cover" alt="Bike maintenance">
+                            <div class="p-6">
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">July 25, 2025</p>
+                                <h3 class="text-xl font-bold mb-2">
+                                    <span class="lang-content" data-lang="en">Getting the Gear Ready</span>
+                                    <span class="lang-content hidden" data-lang="es">Preparando el Equipo</span>
+                                    <span class="lang-content hidden" data-lang="fr">Préparation de l'Équipement</span>
+                                </h3>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    <span class="lang-content" data-lang="en">A huge thank you to our first sponsors for helping get the bike and gear dialed in for the big ride.</span>
+                                    <span class="lang-content hidden" data-lang="es">Un enorme agradecimiento a nuestros primeros patrocinadores por ayudar a poner a punto la bicicleta y el equipo.</span>
+                                    <span class="lang-content hidden" data-lang="fr">Un immense merci à nos premiers sponsors pour leur aide dans la préparation du vélo et de l'équipement.</span>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Update Card 3 -->
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1559132654-d55a5958824a?q=80&w=2070&auto=format&fit=crop" class="w-full h-48 object-cover" alt="Map planning">
+                            <div class="p-6">
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">July 15, 2025</p>
+                                <h3 class="text-xl font-bold mb-2">
+                                    <span class="lang-content" data-lang="en">The Route is Set</span>
+                                    <span class="lang-content hidden" data-lang="es">La Ruta está Definida</span>
+                                    <span class="lang-content hidden" data-lang="fr">L'itinéraire est Fixé</span>
+                                </h3>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    <span class="lang-content" data-lang="en">After weeks of planning, the final route is locked in. It's going to be an epic adventure.</span>
+                                    <span class="lang-content hidden" data-lang="es">Después de semanas de planificación, la ruta final está cerrada. Va a ser una aventura épica.</span>
+                                    <span class="lang-content hidden" data-lang="fr">Après des semaines de planification, l'itinéraire final est validé. Ça va être une aventure épique.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-gray-800 dark:bg-black text-white">
+            <div class="container mx-auto px-6 py-8 text-center">
+                <div class="flex justify-center items-center space-x-6 mb-6">
+                     <img src="https://placehold.co/120x60/FFFFFF/000000?text=UK+Charity+Logo" alt="UK Charity Logo" class="h-10">
+                     <img src="https://placehold.co/120x60/FFFFFF/000000?text=ES+Charity+Logo" alt="Spanish Charity Logo" class="h-10">
+                     <img src="https://placehold.co/120x60/FFFFFF/000000?text=FR+Charity+Logo" alt="French Charity Logo" class="h-10">
+                </div>
+                <p class="mb-2"><a href="mailto:info@example.com" class="hover:text-blue-400">info@pyreneesforgbs.com</a></p>
+                <p class="text-sm text-gray-400">Website designed by Gemini & built by AI.</p>
+                <p class="text-sm text-gray-400">&copy; 2025 Pyrenees for GBS. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const portal = document.getElementById('portal');
+            const mainContent = document.getElementById('main-content');
+            const portalSelector = document.getElementById('portal-lang-selector');
+            const langContents = document.querySelectorAll('.lang-content');
+            const logoLink = document.getElementById('logo-link');
+
+            // --- Function to launch the site with a specific language ---
+            function launchSite(lang) {
+                // Set language for all content elements
+                setLanguage(lang);
+
+                // Fade out portal
+                portal.classList.remove('fade-in'); // Ensure it can be faded in again
+                portal.classList.add('fade-out');
+
+                // Fade in main content after a delay
+                setTimeout(() => {
+                    mainContent.classList.remove('hidden-initial', 'fade-out');
+                    mainContent.classList.add('fade-in');
+                    portal.style.display = 'none'; // Hide portal completely
+                }, 500);
+            }
+            
+            // --- Function to show the portal ---
+            function showPortal() {
+                // Fade out main content
+                mainContent.classList.remove('fade-in');
+                mainContent.classList.add('fade-out');
+
+                // After the transition, reset the state
+                setTimeout(() => {
+                    mainContent.classList.add('hidden-initial'); // Re-hide it for the next launch
+                    
+                    // Make the portal visible and fade it in
+                    portal.style.display = 'flex'; // Reset display property
+                    portal.classList.remove('fade-out');
+                    
+                    // A small delay to allow the browser to apply the display change before starting the animation
+                    requestAnimationFrame(() => {
+                        portal.classList.add('fade-in');
+                    });
+
+                }, 500); // Match the CSS transition duration
+            }
+
+            // --- Auto-detect language and launch site ---
+            function autoDetectAndLaunch() {
+                const userLang = (navigator.language || navigator.userLanguage).slice(0, 2);
+                
+                if (userLang === 'es') {
+                    launchSite('es');
+                } else if (userLang === 'fr') {
+                    launchSite('fr');
+                } else {
+                    // Default to English for all other locales
+                    launchSite('en');
+                }
+            }
+
+            // --- Manual Portal Click Logic (serves as a fallback) ---
+            portalSelector.addEventListener('click', (e) => {
+                const target = e.target.closest('img');
+                if (target && target.dataset.lang) {
+                    launchSite(target.dataset.lang);
+                }
+            });
+
+            // --- Logo Link to show portal ---
+            logoLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPortal();
+            });
+            
+            function setLanguage(lang) {
+                // Set content visibility
+                langContents.forEach(content => {
+                    content.classList.toggle('hidden', content.dataset.lang !== lang);
+                });
+                
+                document.documentElement.lang = lang;
+            }
+
+            // --- Navbar Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // --- Theme Toggler ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const lightIcon = document.getElementById('theme-icon-light');
+            const darkIcon = document.getElementById('theme-icon-dark');
+            const systemIcon = document.getElementById('theme-icon-system');
+            
+            let currentTheme = localStorage.getItem('theme') || 'system';
+
+            function applyTheme(theme) {
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.add('hidden');
+                systemIcon.classList.add('hidden');
+
+                if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                    if (theme === 'dark') darkIcon.classList.remove('hidden');
+                    else systemIcon.classList.remove('hidden');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    if (theme === 'light') lightIcon.classList.remove('hidden');
+                    else systemIcon.classList.remove('hidden');
+                }
+            }
+            
+            applyTheme(currentTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const themes = ['light', 'dark', 'system'];
+                const currentIndex = themes.indexOf(currentTheme);
+                currentTheme = themes[(currentIndex + 1) % themes.length];
+                localStorage.setItem('theme', currentTheme);
+                applyTheme(currentTheme);
+            });
+            
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (currentTheme === 'system') {
+                    applyTheme('system');
+                }
+            });
+
+            // --- Accordion ---
+            const accordionContainer = document.getElementById('accordion-container');
+            accordionContainer.addEventListener('click', (e) => {
+                const toggle = e.target.closest('.accordion-toggle');
+                if (!toggle) return;
+
+                const item = toggle.parentElement;
+                const content = toggle.nextElementSibling;
+                
+                // Close other open items
+                accordionContainer.querySelectorAll('.accordion-item.open').forEach(openItem => {
+                    if (openItem !== item) {
+                        openItem.classList.remove('open');
+                        openItem.querySelector('.accordion-content').style.maxHeight = null;
+                    }
+                });
+
+                // Toggle current item
+                item.classList.toggle('open');
+                if (item.classList.contains('open')) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                } else {
+                    content.style.maxHeight = null;
+                }
+            });
+
+            // --- INITIATE AUTO-LAUNCH ---
+            autoDetectAndLaunch();
+        });
+    </script>
+</body>
+</html>
