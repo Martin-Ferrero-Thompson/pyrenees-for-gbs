@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pyrenees for Guillain-Barré Syndrome</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="A charity ride across the Pyrenees to raise awareness and support for Guillain-Barré Syndrome.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 28.7'><g><path d='M3.6 0v12.8H0V0z' fill='%23ff00cc'/><path d='M17.5 12.8h-3.6L9.1 5.6v7.2H5.5V0h3.6l4.8 7.3V0h3.6z' fill='%23ff00cc'/><path d='M3.6 15.8v7.4c0 .7.2 1.2.5 1.6q.45.6 1.5.6c1.05 0 1.1-.2 1.5-.6.3-.4.5-.9.5-1.6v-7.4h3.6v7.4c0 1.2-.2 2.2-.7 3s-1.2 1.5-2 1.9-1.8.6-2.8.6-2-.2-2.8-.6-1.5-1-1.9-1.9c-.5-.8-.7-1.8-.7-3v-7.4h3.5z' fill='currentColor'/><path d='m20.6 28.7-4-5.6v5.6H13V15.9h3.6v5.5l4-5.5h4.1L20 22.1l5 6.6z' fill='currentColor'/></g></svg>">
+  <style>
+    html { scroll-behavior: smooth; }
+    .fade { transition: opacity 0.5s; }
+    .fade-out { opacity: 0; pointer-events: none; }
+    .fade-in { opacity: 1; pointer-events: auto; }
+  </style>
+</head>
+<body class="bg-white text-gray-900 dark:bg-gray-950 dark:text-white min-h-screen">
+  <!-- Portal Overlay -->
+  <div id="portal" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-pink-100 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-800 fade">
+    <div class="bg-white/90 dark:bg-gray-900/90 rounded-2xl shadow-2xl p-8 max-w-lg w-full flex flex-col items-center">
+      <h1 class="text-3xl md:text-4xl font-bold text-center mb-2" id="portal-title">Pyrenees for Guillain-Barré Syndrome</h1>
+      <p class="text-lg md:text-xl text-center mb-6" id="portal-desc">A charity ride to raise awareness and support.</p>
+      <div class="flex gap-6 justify-center mb-2">
+        <button class="flag-btn" data-lang="en" aria-label="UK" tabindex="0">
+          <span class="sr-only">English (UK)</span>
+          <img src="https://flagcdn.com/48x36/gb.png" alt="UK Flag" class="h-10 w-12 rounded shadow" />
+        </button>
+        <button class="flag-btn scale-110" data-lang="es" aria-label="Spain" tabindex="0">
+          <span class="sr-only">Español (España)</span>
+          <img src="https://flagcdn.com/48x36/es.png" alt="Spain Flag" class="h-10 w-12 rounded shadow" />
+        </button>
+        <button class="flag-btn" data-lang="fr" aria-label="France" tabindex="0">
+          <span class="sr-only">Français (France)</span>
+          <img src="https://flagcdn.com/48x36/fr.png" alt="France Flag" class="h-10 w-12 rounded shadow" />
+        </button>
+      </div>
+      <p class="text-xs text-gray-500 mt-2">Select your region to continue</p>
+    </div>
+  </div>
+
+  <!-- Main Site Wrapper -->
+  <div id="site" class="fade fade-out">
+    <!-- Fixed Navigation Bar -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur shadow transition-all">
+      <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-2">
+        <button id="logo-home" class="flex items-center font-bold text-pink-600 text-2xl focus:outline-none" aria-label="Home">
+          <span id="logo-svg" class="h-8 w-auto"></span>
+        </button>
+        <ul class="hidden md:flex gap-6 text-base font-medium whitespace-nowrap" id="nav-links">
+          <!-- Navigation links injected by JS -->
+        </ul>
+        <div class="flex items-center gap-4">
+          <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none" aria-label="Toggle theme">
+            <span id="theme-icon"></span>
+          </button>
+          <button class="md:hidden p-2" id="mobile-menu-btn" aria-label="Open menu">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile Nav -->
+      <ul id="mobile-nav" class="md:hidden hidden flex-col gap-4 px-4 pb-4"></ul>
+    </nav>
+
+    <!-- Floating Social Panel -->
+    <aside class="fixed left-2 top-1/2 -translate-y-1/2 z-30 hidden sm:flex flex-col gap-3 bg-white/80 dark:bg-gray-900/80 rounded-full shadow p-2">
+      <a href="https://twitter.com/GBSCharity" target="_blank" rel="noopener" aria-label="Twitter" class="hover:text-pink-600"><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.59-2.47.7a4.3 4.3 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 16.11 4c-2.37 0-4.29 1.92-4.29 4.29 0 .34.04.67.11.99C7.69 8.99 4.07 7.13 1.64 4.16c-.37.64-.58 1.39-.58 2.19 0 1.51.77 2.84 1.94 3.62a4.28 4.28 0 0 1-1.94-.54v.05c0 2.11 1.5 3.87 3.5 4.27-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.7 2.12 2.94 3.99 2.97A8.6 8.6 0 0 1 2 19.54c-.29 0-.57-.02-.85-.05A12.13 12.13 0 0 0 8.29 21.5c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 4.59a8.36 8.36 0 0 1-2.54.7z"/></svg></a>
+      <a href="https://facebook.com/GBSCharity" target="_blank" rel="noopener" aria-label="Facebook" class="hover:text-pink-600"><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22.68 0H1.32A1.32 1.32 0 0 0 0 1.32v21.36A1.32 1.32 0 0 0 1.32 24h11.5v-9.29H9.69V11.1h3.13V8.41c0-3.1 1.89-4.79 4.65-4.79 1.32 0 2.45.1 2.78.14v3.22h-1.91c-1.5 0-1.79.71-1.79 1.75v2.29h3.58l-.47 3.61h-3.11V24h6.09A1.32 1.32 0 0 0 24 22.68V1.32A1.32 1.32 0 0 0 22.68 0"/></svg></a>
+      <a href="mailto:info@gbscharity.org" aria-label="Email" class="hover:text-pink-600"><svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2v.01L12 13 4 6.01V6h16zM4 20v-9.99l7.99 7.99c.39.39 1.02.39 1.41 0L20 10.01V20H4z"/></svg></a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+      <!-- Hero Section -->
+      <section id="hero" class="min-h-screen flex flex-col justify-center items-center bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80');">
+        <div class="bg-white/80 dark:bg-gray-900/80 rounded-xl p-8 max-w-2xl mx-auto text-center shadow-lg">
+          <h2 class="text-4xl md:text-5xl font-extrabold mb-4" id="hero-headline"></h2>
+          <p class="text-lg md:text-2xl mb-6" id="hero-sub"></p>
+          <button class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow transition" id="support-btn"></button>
+        </div>
+      </section>
+
+      <!-- The Story Section -->
+      <section id="story" class="py-16 bg-white dark:bg-gray-950">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-10 items-center px-4">
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Rider" class="w-64 h-64 object-cover rounded-2xl shadow-lg">
+          <div>
+            <h3 class="text-2xl font-bold mb-4" id="story-title"></h3>
+            <p class="text-lg" id="story-text"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- About GBS Section -->
+      <section id="about" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-3xl mx-auto px-4">
+          <h3 class="text-2xl font-bold mb-8 text-center" id="about-title"></h3>
+          <div id="accordion" class="space-y-4">
+            <!-- Accordion items injected by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- The Ride Section -->
+      <section id="ride" class="py-16 bg-white dark:bg-gray-950">
+        <div class="max-w-5xl mx-auto px-4">
+          <h3 class="text-2xl font-bold mb-8 text-center" id="ride-title"></h3>
+          <div class="flex flex-col md:flex-row gap-8 items-center">
+            <img src="https://www.openstreetmap.org/export/embed.html?bbox=0.5,42.5,2.5,43.5&amp;layer=mapnik" alt="Pyrenees Route Map" class="w-full md:w-1/2 h-64 object-cover rounded-xl shadow">
+            <div class="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+              <div class="bg-gray-100 dark:bg-gray-800 rounded-xl p-6 shadow">
+                <div class="text-3xl font-bold text-pink-600" id="stat-distance"></div>
+                <div class="text-sm mt-2" id="stat-distance-label"></div>
+              </div>
+              <div class="bg-gray-100 dark:bg-gray-800 rounded-xl p-6 shadow">
+                <div class="text-3xl font-bold text-pink-600" id="stat-elevation"></div>
+                <div class="text-sm mt-2" id="stat-elevation-label"></div>
+              </div>
+              <div class="bg-gray-100 dark:bg-gray-800 rounded-xl p-6 shadow">
+                <div class="text-3xl font-bold text-pink-600" id="stat-days"></div>
+                <div class="text-sm mt-2" id="stat-days-label"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charity Section -->
+      <section id="charity" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-xl mx-auto px-4">
+          <h3 class="text-2xl font-bold mb-8 text-center" id="charity-title"></h3>
+          <div id="charity-card" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 flex flex-col items-center text-center">
+            <!-- Charity card content injected by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Sponsors Section -->
+      <section id="sponsors" class="py-16 bg-white dark:bg-gray-950">
+        <div class="max-w-5xl mx-auto px-4">
+          <h3 class="text-2xl font-bold mb-8 text-center" id="sponsors-title"></h3>
+          <div id="sponsor-logos" class="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8">
+            <!-- Sponsor logos injected by JS -->
+          </div>
+          <div class="text-center">
+            <a id="sponsor-cta" href="mailto:sponsor@gbscharity.org" class="inline-block bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow transition"></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Updates / Blog Section -->
+      <section id="updates" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-5xl mx-auto px-4">
+          <h3 class="text-2xl font-bold mb-8 text-center" id="updates-title"></h3>
+          <div id="updates-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <!-- Update cards injected by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="py-8 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 mt-8">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="flex items-center gap-4 mb-4 md:mb-0">
+            <a href="mailto:info@gbscharity.org" class="text-pink-600 hover:underline text-sm font-medium">General Inquiries</a>
+            <span class="hidden sm:inline text-gray-400">|</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Flag_of_the_United_Kingdom.svg" alt="UK Charity" class="h-6 w-8 rounded shadow" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="Spain Charity" class="h-6 w-8 rounded shadow" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="France Charity" class="h-6 w-8 rounded shadow" />
+          </div>
+          <div class="text-xs text-gray-500 text-center md:text-right">
+            Website by <a href="https://geminiproweb.com" class="hover:underline" target="_blank" rel="noopener">Gemini Pro Web Design</a> &copy; 2025
+          </div>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- JavaScript for Interactivity and Localization -->
+  <script>
+    // --- Language Data ---
+    const LANGS = ['en', 'es', 'fr'];
+    const DEFAULT_LANG = 'en';
+    const STRINGS = {
+      en: {
+        nav: ["The Story", "The Ride", "About GBS", "The Charity", "Sponsors", "Updates"],
+        hero: {
+          headline: "Cycling the Pyrenees for GBS Awareness",
+          sub: "A journey of hope, resilience, and support for Guillain-Barré Syndrome.",
+          btn: "Support the Ride"
+        },
+        story: {
+          title: "The Rider's Story",
+          text: "After surviving Guillain-Barré Syndrome, our rider is taking on the Pyrenees to inspire others and raise vital funds for GBS support agencies. This journey is about overcoming adversity and giving back to the community that helped along the way."
+        },
+        about: {
+          title: "About Guillain-Barré Syndrome (GBS)",
+          accordion: [
+            {
+              title: "What is GBS?",
+              content: "Guillain-Barré Syndrome (GBS) is a rare neurological disorder where the body's immune system attacks the nerves. It can cause muscle weakness, paralysis, and requires urgent medical attention."
+            },
+            {
+              title: "The Recovery Path",
+              content: "Recovery from GBS varies for each person. It often involves months of rehabilitation, support from family and friends, and ongoing medical care. Many regain their independence, but some face lasting effects."
+            },
+            {
+              title: "Support Agencies",
+              content: "National GBS support agencies provide resources, advocacy, and community for those affected. Your support helps these organizations continue their vital work."
+            }
+          ]
+        },
+        ride: {
+          title: "The Ride",
+          stats: {
+            distance: "720 km",
+            distanceLabel: "Distance",
+            elevation: "16,000 m",
+            elevationLabel: "Elevation Gain",
+            days: "8",
+            daysLabel: "Days"
+          }
+        },
+        charity: {
+          title: "Support Our UK Partner",
+          card: {
+            logo: "https://gbs-cidp.org.uk/wp-content/uploads/2021/03/GBS-CIDP-Logo.png",
+            name: "GBS-CIDP Foundation International (UK)",
+            desc: "The UK's leading charity for GBS, CIDP, and associated inflammatory neuropathies. Your donation helps provide support, information, and advocacy for patients and families.",
+            link: "https://gbs-cidp.org.uk/donate/",
+            linkText: "Donate to GBS-CIDP UK"
+          }
+        },
+        sponsors: {
+          title: "Sponsors",
+          cta: "Become a Sponsor"
+        },
+        updates: {
+          title: "Updates & Blog",
+          posts: [
+            {
+              img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80",
+              date: "2025-07-01",
+              title: "Training Begins",
+              snippet: "Our rider starts the training journey, preparing for the Pyrenees challenge."
+            },
+            {
+              img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=400&q=80",
+              date: "2025-07-15",
+              title: "Route Announced",
+              snippet: "The official route across the Pyrenees is revealed, covering 720 km and 16,000 m of climbing."
+            },
+            {
+              img: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80",
+              date: "2025-08-01",
+              title: "Meet the Charities",
+              snippet: "Learn more about the three national GBS support agencies benefiting from this ride."
+            }
+          ]
+        }
+      },
+      es: {
+        nav: ["La Historia", "La Ruta", "Sobre GBS", "La ONG", "Patrocinadores", "Actualizaciones"],
+        hero: {
+          headline: "Pedaleando los Pirineos por la Concienciación sobre GBS",
+          sub: "Un viaje de esperanza, resiliencia y apoyo para el Síndrome de Guillain-Barré.",
+          btn: "Apoya la Ruta"
+        },
+        story: {
+          title: "La Historia del Ciclista",
+          text: "Tras superar el Síndrome de Guillain-Barré, nuestro ciclista afronta los Pirineos para inspirar a otros y recaudar fondos vitales para las asociaciones de apoyo a GBS. Este viaje trata de superar la adversidad y devolver a la comunidad que le ayudó."
+        },
+        about: {
+          title: "Sobre el Síndrome de Guillain-Barré (GBS)",
+          accordion: [
+            {
+              title: "¿Qué es GBS?",
+              content: "El Síndrome de Guillain-Barré (GBS) es un trastorno neurológico raro en el que el sistema inmunitario ataca los nervios. Puede causar debilidad muscular, parálisis y requiere atención médica urgente."
+            },
+            {
+              title: "El Camino de la Recuperación",
+              content: "La recuperación del GBS varía en cada persona. Suele requerir meses de rehabilitación, apoyo familiar y atención médica continua. Muchos recuperan su independencia, pero algunos sufren secuelas."
+            },
+            {
+              title: "Asociaciones de Apoyo",
+              content: "Las asociaciones nacionales de GBS ofrecen recursos, defensa y comunidad a los afectados. Tu apoyo ayuda a que estas organizaciones continúen su labor vital."
+            }
+          ]
+        },
+        ride: {
+          title: "La Ruta",
+          stats: {
+            distance: "720 km",
+            distanceLabel: "Distancia",
+            elevation: "16.000 m",
+            elevationLabel: "Desnivel Acumulado",
+            days: "8",
+            daysLabel: "Días"
+          }
+        },
+        charity: {
+          title: "Apoya a Nuestra ONG Española",
+          card: {
+            logo: "https://gbs-cidp.es/wp-content/uploads/2021/03/logo-gbs-cidp.png",
+            name: "Asociación Española de GBS-PFS y MFS",
+            desc: "La principal asociación española para GBS, CIDP y neuropatías inflamatorias asociadas. Tu donación ayuda a ofrecer apoyo, información y defensa a pacientes y familias.",
+            link: "https://gbs-cidp.es/donaciones/",
+            linkText: "Donar a GBS-CIDP España"
+          }
+        },
+        sponsors: {
+          title: "Patrocinadores",
+          cta: "Hazte Patrocinador"
+        },
+        updates: {
+          title: "Actualizaciones & Blog",
+          posts: [
+            {
+              img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80",
+              date: "2025-07-01",
+              title: "Comienza el Entrenamiento",
+              snippet: "Nuestro ciclista inicia la preparación para el reto de los Pirineos."
+            },
+            {
+              img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=400&q=80",
+              date: "2025-07-15",
+              title: "Ruta Anunciada",
+              snippet: "Se revela la ruta oficial a través de los Pirineos: 720 km y 16.000 m de desnivel."
+            },
+            {
+              img: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80",
+              date: "2025-08-01",
+              title: "Conoce las ONGs",
+              snippet: "Conoce a las tres asociaciones nacionales de GBS beneficiarias de esta ruta."
+            }
+          ]
+        }
+      },
+      fr: {
+        nav: ["L'Histoire", "Le Parcours", "À propos du GBS", "L'Association", "Sponsors", "Actualités"],
+        hero: {
+          headline: "Traverser les Pyrénées pour la sensibilisation au GBS",
+          sub: "Un voyage d'espoir, de résilience et de soutien pour le syndrome de Guillain-Barré.",
+          btn: "Soutenir la Traversée"
+        },
+        story: {
+          title: "L'Histoire du Cycliste",
+          text: "Après avoir surmonté le syndrome de Guillain-Barré, notre cycliste se lance dans la traversée des Pyrénées pour inspirer et collecter des fonds pour les associations de soutien au GBS. Ce voyage est une histoire de dépassement et de solidarité."
+        },
+        about: {
+          title: "À propos du syndrome de Guillain-Barré (GBS)",
+          accordion: [
+            {
+              title: "Qu'est-ce que le GBS ?",
+              content: "Le syndrome de Guillain-Barré (GBS) est une maladie neurologique rare où le système immunitaire attaque les nerfs. Elle peut provoquer une faiblesse musculaire, une paralysie et nécessite une prise en charge urgente."
+            },
+            {
+              title: "Le Chemin de la Récupération",
+              content: "La récupération du GBS varie selon les personnes. Elle implique souvent des mois de rééducation, le soutien de la famille et des soins médicaux continus. Beaucoup retrouvent leur autonomie, mais certains gardent des séquelles."
+            },
+            {
+              title: "Les Associations de Soutien",
+              content: "Les associations nationales de GBS offrent ressources, défense et communauté. Votre soutien permet à ces organisations de poursuivre leur mission essentielle."
+            }
+          ]
+        },
+        ride: {
+          title: "Le Parcours",
+          stats: {
+            distance: "720 km",
+            distanceLabel: "Distance",
+            elevation: "16 000 m",
+            elevationLabel: "Dénivelé positif",
+            days: "8",
+            daysLabel: "Jours"
+          }
+        },
+        charity: {
+          title: "Soutenez Notre Partenaire Français",
+          card: {
+            logo: "https://gbs-cidp.fr/wp-content/uploads/2021/03/logo-gbs-cidp.png",
+            name: "Association Française GBS-PFS et MFS",
+            desc: "L'association française de référence pour le GBS, le CIDP et les neuropathies inflammatoires associées. Votre don aide à fournir soutien, information et défense aux patients et familles.",
+            link: "https://gbs-cidp.fr/don/",
+            linkText: "Faire un don à GBS-CIDP France"
+          }
+        },
+        sponsors: {
+          title: "Sponsors",
+          cta: "Devenir Sponsor"
+        },
+        updates: {
+          title: "Actualités & Blog",
+          posts: [
+            {
+              img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80",
+              date: "2025-07-01",
+              title: "Début de l'entraînement",
+              snippet: "Notre cycliste commence la préparation pour le défi des Pyrénées."
+            },
+            {
+              img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=400&q=80",
+              date: "2025-07-15",
+              title: "Parcours Annoncé",
+              snippet: "Le parcours officiel à travers les Pyrénées est dévoilé : 720 km et 16 000 m de dénivelé."
+            },
+            {
+              img: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80",
+              date: "2025-08-01",
+              title: "Découvrez les Associations",
+              snippet: "Découvrez les trois associations nationales de GBS bénéficiaires de cette traversée."
+            }
+          ]
+        }
+      }
+    };
+
+    // --- State ---
+    let currentLang = DEFAULT_LANG;
+
+    // --- Utility Functions ---
+    function setLang(lang) {
+      if (!LANGS.includes(lang)) lang = DEFAULT_LANG;
+      currentLang = lang;
+      localStorage.setItem('gbs-lang', lang);
+    }
+    function getLang() {
+      return localStorage.getItem('gbs-lang') || currentLang;
+    }
+    function detectLang() {
+      const navLang = navigator.language.slice(0,2).toLowerCase();
+      if (LANGS.includes(navLang)) return navLang;
+      return DEFAULT_LANG;
+    }
+    function fadeOut(el) {
+      el.classList.remove('fade-in');
+      el.classList.add('fade-out');
+    }
+    function fadeIn(el) {
+      el.classList.remove('fade-out');
+      el.classList.add('fade-in');
+    }
+
+    // --- Portal Logic ---
+    function showPortal() {
+      const portal = document.getElementById('portal');
+      fadeIn(portal);
+      fadeOut(document.getElementById('site'));
+    }
+    function hidePortal() {
+      const portal = document.getElementById('portal');
+      fadeOut(portal);
+      fadeIn(document.getElementById('site'));
+    }
+
+    // --- Main Site Rendering ---
+    function renderSite(lang) {
+      // Navbar logo
+      const logo = document.getElementById('logo-svg');
+      if (lang === 'en') {
+        logo.innerHTML = `<svg class="h-8 w-auto" preserveAspectRatio="xMidYMid meet" viewBox="0 0 25 28.7" xmlns="http://www.w3.org/2000/svg" role="presentation" aria-hidden="true"><g><path d="M3.6 0v12.8H0V0z" fill="#ff00cc"></path><path d="M17.5 12.8h-3.6L9.1 5.6v7.2H5.5V0h3.6l4.8 7.3V0h3.6z" fill="#ff00cc"></path><path d="M3.6 15.8v7.4c0 .7.2 1.2.5 1.6q.45.6 1.5.6c1.05 0 1.1-.2 1.5-.6.3-.4.5-.9.5-1.6v-7.4h3.6v7.4c0 1.2-.2 2.2-.7 3s-1.2 1.5-2 1.9-1.8.6-2.8.6-2-.2-2.8-.6-1.5-1-1.9-1.9c-.5-.8-.7-1.8-.7-3v-7.4h3.5z" fill="currentColor"></path><path d="m20.6 28.7-4-5.6v5.6H13V15.9h3.6v5.5l4-5.5h4.1L20 22.1l5 6.6z" fill="currentColor"></path></g></svg>`;
+      } else {
+        logo.textContent = 'GBS';
+      }
+      // Navbar links
+      const navLinks = STRINGS[lang].nav;
+      const navUl = document.getElementById('nav-links');
+      navUl.innerHTML = '';
+      navLinks.forEach((txt, i) => {
+        const ids = ['story','ride','about','charity','sponsors','updates'];
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `#${ids[i]}`;
+        a.textContent = txt;
+        a.className = 'hover:text-pink-600 transition';
+        a.onclick = () => closeMobileNav();
+        li.appendChild(a);
+        navUl.appendChild(li);
+      });
+      // Mobile nav
+      const mobileNav = document.getElementById('mobile-nav');
+      mobileNav.innerHTML = '';
+      navLinks.forEach((txt, i) => {
+        const ids = ['story','ride','about','charity','sponsors','updates'];
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `#${ids[i]}`;
+        a.textContent = txt;
+        a.className = 'block py-2 px-4 hover:bg-pink-100 dark:hover:bg-gray-800 rounded';
+        a.onclick = () => closeMobileNav();
+        li.appendChild(a);
+        mobileNav.appendChild(li);
+      });
+      // Hero
+      document.getElementById('hero-headline').textContent = STRINGS[lang].hero.headline;
+      document.getElementById('hero-sub').textContent = STRINGS[lang].hero.sub;
+      document.getElementById('support-btn').textContent = STRINGS[lang].hero.btn;
+      // Story
+      document.getElementById('story-title').textContent = STRINGS[lang].story.title;
+      document.getElementById('story-text').textContent = STRINGS[lang].story.text;
+      // About
+      document.getElementById('about-title').textContent = STRINGS[lang].about.title;
+      // Accordion
+      const accordion = document.getElementById('accordion');
+      accordion.innerHTML = '';
+      STRINGS[lang].about.accordion.forEach((item, idx) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'rounded-xl bg-white dark:bg-gray-800 shadow p-4 flex flex-col';
+        const btn = document.createElement('button');
+        btn.className = 'flex items-center justify-between w-full text-lg font-semibold focus:outline-none';
+        btn.innerHTML = `<span>${item.title}</span><span class="ml-2 transition-transform duration-200" id="plusminus${idx}">+</span>`;
+        btn.onclick = () => toggleAccordion(idx);
+        const content = document.createElement('div');
+        content.className = 'mt-2 text-gray-700 dark:text-gray-200 hidden';
+        content.id = `acc-content${idx}`;
+        content.textContent = item.content;
+        wrapper.appendChild(btn);
+        wrapper.appendChild(content);
+        accordion.appendChild(wrapper);
+      });
+      // Ride
+      document.getElementById('ride-title').textContent = STRINGS[lang].ride.title;
+      document.getElementById('stat-distance').textContent = STRINGS[lang].ride.stats.distance;
+      document.getElementById('stat-distance-label').textContent = STRINGS[lang].ride.stats.distanceLabel;
+      document.getElementById('stat-elevation').textContent = STRINGS[lang].ride.stats.elevation;
+      document.getElementById('stat-elevation-label').textContent = STRINGS[lang].ride.stats.elevationLabel;
+      document.getElementById('stat-days').textContent = STRINGS[lang].ride.stats.days;
+      document.getElementById('stat-days-label').textContent = STRINGS[lang].ride.stats.daysLabel;
+      // Charity
+      document.getElementById('charity-title').textContent = STRINGS[lang].charity.title;
+      const card = STRINGS[lang].charity.card;
+      document.getElementById('charity-card').innerHTML = `
+        <img src="${card.logo}" alt="${card.name} Logo" class="h-16 mb-4 rounded shadow">
+        <h4 class="text-xl font-bold mb-2">${card.name}</h4>
+        <p class="mb-4">${card.desc}</p>
+        <a href="${card.link}" target="_blank" rel="noopener" class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-6 rounded-full shadow transition">${card.linkText}</a>
+      `;
+      // Sponsors
+      document.getElementById('sponsors-title').textContent = STRINGS[lang].sponsors.title;
+      document.getElementById('sponsor-cta').textContent = STRINGS[lang].sponsors.cta;
+      // Sponsor logos (placeholder, can be replaced with real sponsors)
+      const sponsorLogos = [
+        'https://upload.wikimedia.org/wikipedia/commons/4/44/Googleplex-Patio-Aug-2014.JPG',
+        'https://upload.wikimedia.org/wikipedia/commons/6/6e/Flag_of_the_United_Kingdom.svg',
+        'https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg',
+        'https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg'
+      ];
+      const sponsorGrid = document.getElementById('sponsor-logos');
+      sponsorGrid.innerHTML = '';
+      sponsorLogos.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Sponsor Logo';
+        img.className = 'h-16 w-auto object-contain rounded shadow bg-white p-2';
+        sponsorGrid.appendChild(img);
+      });
+      // Updates
+      document.getElementById('updates-title').textContent = STRINGS[lang].updates.title;
+      const updatesGrid = document.getElementById('updates-grid');
+      updatesGrid.innerHTML = '';
+      STRINGS[lang].updates.posts.forEach(post => {
+        const card = document.createElement('div');
+        card.className = 'bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex flex-col';
+        card.innerHTML = `
+          <img src="${post.img}" alt="${post.title}" class="h-32 w-full object-cover rounded mb-3">
+          <div class="text-xs text-gray-500 mb-1">${post.date}</div>
+          <div class="font-bold mb-1">${post.title}</div>
+          <div class="text-sm">${post.snippet}</div>
+        `;
+        updatesGrid.appendChild(card);
+      });
+    }
+
+    // --- Accordion Logic ---
+    function toggleAccordion(idx) {
+      for (let i = 0; i < 3; i++) {
+        const content = document.getElementById(`acc-content${i}`);
+        const icon = document.getElementById(`plusminus${i}`);
+        if (i === idx) {
+          const isOpen = !content.classList.contains('hidden');
+          if (isOpen) {
+            content.classList.add('hidden');
+            icon.textContent = '+';
+            content.parentElement.classList.remove('bg-pink-50','dark:bg-pink-900/30');
+          } else {
+            content.classList.remove('hidden');
+            icon.textContent = '–';
+            content.parentElement.classList.add('bg-pink-50','dark:bg-pink-900/30');
+          }
+        } else {
+          content.classList.add('hidden');
+          icon.textContent = '+';
+          content.parentElement.classList.remove('bg-pink-50','dark:bg-pink-900/30');
+        }
+      }
+    }
+
+    // --- Theme Switcher ---
+    const THEMES = ['light','dark','system'];
+    function getTheme() {
+      return localStorage.getItem('gbs-theme') || 'system';
+    }
+    function setTheme(theme) {
+      if (!THEMES.includes(theme)) theme = 'system';
+      localStorage.setItem('gbs-theme', theme);
+      applyTheme(theme);
+    }
+    function applyTheme(theme) {
+      if (theme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        // System
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+      updateThemeIcon(theme);
+    }
+    function updateThemeIcon(theme) {
+      const icon = document.getElementById('theme-icon');
+      if (theme === 'light') {
+        icon.innerHTML = `<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+      } else if (theme === 'dark') {
+        icon.innerHTML = `<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>`;
+      } else {
+        icon.innerHTML = `<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v1M12 20v1M4.22 4.22l.7.7M18.36 18.36l.7.7M1 12h1M22 12h1M4.22 19.78l.7-.7M18.36 5.64l.7-.7"/><circle cx="12" cy="12" r="5"/></svg>`;
+      }
+    }
+    function cycleTheme() {
+      let theme = getTheme();
+      let idx = THEMES.indexOf(theme);
+      theme = THEMES[(idx+1)%THEMES.length];
+      setTheme(theme);
+    }
+
+    // --- Navbar Scroll Effect ---
+    function handleNavScroll() {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 10) {
+        nav.classList.add('backdrop-blur-md','shadow-lg');
+      } else {
+        nav.classList.remove('backdrop-blur-md','shadow-lg');
+      }
+    }
+    window.addEventListener('scroll', handleNavScroll);
+
+    // --- Mobile Nav ---
+    function openMobileNav() {
+      document.getElementById('mobile-nav').classList.remove('hidden');
+    }
+    function closeMobileNav() {
+      document.getElementById('mobile-nav').classList.add('hidden');
+    }
+    document.getElementById('mobile-menu-btn').onclick = openMobileNav;
+    document.getElementById('mobile-nav').onclick = closeMobileNav;
+
+    // --- Logo Home Button ---
+    document.getElementById('logo-home').onclick = function() {
+      showPortal();
+    };
+
+    // --- Theme Toggle Button ---
+    document.getElementById('theme-toggle').onclick = cycleTheme;
+
+    // --- Portal Flag Buttons ---
+    document.querySelectorAll('.flag-btn').forEach(btn => {
+      btn.onclick = function() {
+        const lang = btn.getAttribute('data-lang');
+        setLang(lang);
+        renderSite(lang);
+        hidePortal();
+      };
+    });
+
+    // --- Initial Load: Language Detection ---
+    (function init() {
+      let lang = getLang();
+      if (!lang) {
+        lang = detectLang();
+        setLang(lang);
+      }
+      // If not manually set, auto-bypass portal for es/fr/en
+      if (['es','fr','en'].includes(lang) || ['es','fr','en'].includes(detectLang())) {
+        renderSite(lang);
+        hidePortal();
+      } else {
+        showPortal();
+      }
+      // Theme
+      applyTheme(getTheme());
+      // System theme change
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (getTheme() === 'system') applyTheme('system');
+      });
+    })();
+  </script>
+</body>
+</html>
