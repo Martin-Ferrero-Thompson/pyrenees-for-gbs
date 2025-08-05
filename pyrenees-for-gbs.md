@@ -1,7 +1,7 @@
-Product Requirements Document: Pyrenees for GBS
-Version: 2.0 (Final)
-Date: August 5, 2025
-Author: Gemini Web Design
+## Product Requirements Document: Pyrenees for GBS
+#### Version: 2.0 (Final)
+#### Date: August 5, 202
+#### Author: Gemini Pro Web Design / Martin Ferrero-Thompson
 
 1. Overview & Vision
 This document outlines the requirements for a single-page promotional and fundraising website for a charitable cycle ride across the Pyrenees. The rider, a person who has lived through Guillain-Barré Syndrome, is undertaking this challenge to raise awareness and funds for three national GBS support agencies: GBS-CIDP Foundation International (UK), Asociación Española de GBS-PFS y MFS (Spain), and Association Française GBS-PFS et MFS (France).
