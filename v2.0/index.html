@@ -108,16 +108,6 @@
         </div>
       </section>
 
-      <!-- About GBS Section -->
-      <section id="about" class="py-16 bg-gray-50 dark:bg-gray-900">
-        <div class="max-w-3xl mx-auto px-4">
-          <h3 class="text-2xl font-bold mb-8 text-center" id="about-title"></h3>
-          <div id="accordion" class="space-y-4">
-            <!-- Accordion items injected by JS -->
-          </div>
-        </div>
-      </section>
-
       <!-- The Ride Section -->
       <section id="ride" class="py-16 bg-white dark:bg-gray-950">
         <div class="max-w-5xl mx-auto px-4">
@@ -138,6 +128,16 @@
                 <div class="text-sm mt-2" id="stat-days-label"></div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- About GBS Section -->
+      <section id="about" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="max-w-3xl mx-auto px-4">
+          <h3 class="text-2xl font-bold mb-8 text-center" id="about-title"></h3>
+          <div id="accordion" class="space-y-4">
+            <!-- Accordion items injected by JS -->
           </div>
         </div>
       </section>
@@ -241,7 +241,7 @@
         charity: {
           title: "Support Our UK Partner",
           card: {
-            logo: "https://gbs-cidp.org.uk/wp-content/uploads/2021/03/GBS-CIDP-Logo.png",
+            logo: "https://static.wixstatic.com/media/5eb6b8_2a1f31c55db64290b933ecd693d774e0~mv2.png/v1/fill/w_255,h_59,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/INUK-Wordmark-Logo_RGB.png",
             name: "GBS-CIDP Foundation International (UK)",
             desc: "The UK's leading charity for GBS, CIDP, and associated inflammatory neuropathies. Your donation helps provide support, information, and advocacy for patients and families.",
             link: "https://gbs-cidp.org.uk/donate/",
@@ -700,6 +700,11 @@
         setLang(lang);
         renderSite(lang);
         hidePortal();
+        // Always scroll to Hero section after portal closes
+        setTimeout(() => {
+          const hero = document.getElementById('hero');
+          if (hero) hero.scrollIntoView({ behavior: 'smooth' });
+        }, 400); // Wait for fade transition
       };
     });
 
